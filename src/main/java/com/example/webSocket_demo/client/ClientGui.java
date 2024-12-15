@@ -125,9 +125,16 @@ public class ClientGui extends JFrame implements MessageListener{
         usernameLabel.setForeground(Utility.TEXT_COLOR);
         chatMessage.add(usernameLabel);
 
-        JLabel messageLabel = new JLabel(message.getMessage());
+        JLabel messageLabel = new JLabel();
+        messageLabel
+                .setText("<html>" +
+                            "<body style='width: "+(0.60 * getWidth())+"px'>" +
+                                  message.getMessage() +
+                            "</body>" +
+                         "</html>");
         messageLabel.setFont(new Font("Inter", Font.PLAIN, 18));
         messageLabel.setForeground(Utility.TEXT_COLOR);
+
         chatMessage.add(messageLabel);
 
         return chatMessage;
@@ -138,6 +145,7 @@ public class ClientGui extends JFrame implements MessageListener{
         messagePanel.add(createChatMessageComponent(message));
         revalidate();
         repaint();
+        messagePanelScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
     }
 
     @Override

@@ -22,7 +22,6 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
         System.out.println("Client connected");
 
-        session.send("/app/connect", username);
         session.subscribe("/topic/messages", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -67,6 +66,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
         });
         System.out.println("Subscribe to /topic/user" );
 
+        session.send("/app/connect", username);
         session.send("/app/request-users", " ");
     }
 
