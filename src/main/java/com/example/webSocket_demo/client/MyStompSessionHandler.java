@@ -55,7 +55,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 try {
-                    if (payload instanceof ArrayList<?>) {
+                    if (payload instanceof ArrayList) {
                         ArrayList<String> activeUsers = (ArrayList<String>) payload;
                         messageListener.onActiveUsersUpdated(activeUsers);
                         System.out.println("Receive active user: " + activeUsers);
@@ -65,7 +65,9 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
                 }
             }
         });
-        System.out.println("Subscribe to /topic/user: " );
+        System.out.println("Subscribe to /topic/user" );
+
+        session.send("/app/request-users", " ");
     }
 
     @Override
