@@ -10,8 +10,10 @@ import java.lang.reflect.Type;
 
 public class MyStompSessionHandler extends StompSessionHandlerAdapter {
     private String username;
+    private MessageListener messageListener;
 
-    public MyStompSessionHandler(String username) {
+    public MyStompSessionHandler(MessageListener messageListener, String username) {
+        this.messageListener = messageListener;
         this.username = username;
     }
 
@@ -31,7 +33,8 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
                 try {
                     if (payload instanceof Message) {
                         Message message = (Message) payload;
-                        System.out.println("Received message: " + message.getUser() + ": " +message.getMessage());
+                        messageListener.onMessageReceive(message);
+                        System.out.println("Received message: " + message.getUser() + ": " + message.getMessage());
                     } else {
                         System.out.println("Received unexpected payload type: " + payload.getClass());
                     }

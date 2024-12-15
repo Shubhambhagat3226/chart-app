@@ -8,12 +8,18 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
-public class ClientGui extends JFrame {
+public class ClientGui extends JFrame implements MessageListener{
     private JPanel connectedUsersPanel, messagePanel;
+    private MyStompClient myStompClient;
+    private String username;
 
-    public ClientGui(String username) {
+    public ClientGui(String username) throws ExecutionException, InterruptedException {
         super("User: " + username);
+        this.username = username;
+        myStompClient = new MyStompClient(this, username);
 
         setSize(1216,685);
         setLocationRelativeTo(null);
@@ -26,6 +32,7 @@ public class ClientGui extends JFrame {
                         "Exit", JOptionPane.YES_NO_OPTION);
 
                 if (choose == JOptionPane.YES_OPTION) {
+                    myStompClient.disconnectUser(username);
                     ClientGui.this.dispose();
                 }
             }
@@ -87,9 +94,7 @@ public class ClientGui extends JFrame {
                     if (input.isEmpty()) return;
                     inputField.setText("");
 
-                    messagePanel.add(createChatMessageComponent(new Message("Bye-Bye", input)));
-                    repaint();
-                    revalidate();
+                    myStompClient.sendMessage(new Message(username, input));
                 }
             }
         });
@@ -117,5 +122,17 @@ public class ClientGui extends JFrame {
         chatMessage.add(messageLabel);
 
         return chatMessage;
+    }
+
+    @Override
+    public void onMessageReceive(Message message) {
+        messagePanel.add(createChatMessageComponent(message));
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    public void onActiveUsersUpdated(ArrayList<String> users) {
+
     }
 }
