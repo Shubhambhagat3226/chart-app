@@ -133,6 +133,26 @@ public class ClientGui extends JFrame implements MessageListener{
 
     @Override
     public void onActiveUsersUpdated(ArrayList<String> users) {
+        // REMOVE THE CURRENT USER LIST PANEL (WHICH SHOULD BE THE SECOND COMPONENT IN THE PANEL)
+        // THE USER LIST PANEL DOESN'T GET ADDED UNTIL AFTER AND THIS IS MAINLY FOR WHEN THE USERS GET UPDATE
+        if (connectedUsersPanel.getComponents().length >= 2) {
+            connectedUsersPanel.remove(1);
+        }
 
+        JPanel userListPanel = new JPanel();
+        userListPanel.setBackground(Utility.TRANSPARENT_COLOR);
+        userListPanel.setLayout(new BoxLayout(userListPanel, BoxLayout.Y_AXIS));
+
+        users.stream().forEach(user -> {
+            JLabel username = new JLabel(user);
+            username.setFont(new Font("Inter", Font.BOLD, 16));
+            username.setForeground(Utility.TEXT_COLOR);
+            username.setBorder(Utility.addPadding(5, 5, 5, 5));
+            userListPanel.add(username);
+        });
+
+        connectedUsersPanel.add(userListPanel);
+        revalidate();
+        repaint();
     }
 }
