@@ -4,11 +4,9 @@ import com.example.webSocket_demo.Message;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 public class ClientGui extends JFrame implements MessageListener{
@@ -23,6 +21,7 @@ public class ClientGui extends JFrame implements MessageListener{
         myStompClient = new MyStompClient(this, username);
 
         setSize(1216,685);
+        setMinimumSize(new Dimension(700, 600));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -36,6 +35,13 @@ public class ClientGui extends JFrame implements MessageListener{
                     myStompClient.disconnectUser(username);
                     ClientGui.this.dispose();
                 }
+            }
+        });
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                updateMessageSize();
             }
         });
 
@@ -171,5 +177,26 @@ public class ClientGui extends JFrame implements MessageListener{
         connectedUsersPanel.add(userListPanel);
         revalidate();
         repaint();
+    }
+
+    private void updateMessageSize(){
+        for (int i = 0; i < messagePanel.getComponents().length; i++) {
+            Component c = messagePanel.getComponent(i);
+            if (c instanceof  JPanel) {
+                JPanel chatMessage = (JPanel) c;
+                if (chatMessage.getComponent(1) instanceof  JLabel) {
+                    JLabel messageLabel = (JLabel) chatMessage.getComponent(1);
+                    messageLabel
+                        .setText("<html>" +
+                                "<body style='width: "+(0.60 * getWidth())+"px'>" +
+                                messageLabel.getText() +
+                                "</body>" +
+                                "</html>");
+                }
+            }
+        }
+        revalidate();
+        repaint();
+
     }
 }
