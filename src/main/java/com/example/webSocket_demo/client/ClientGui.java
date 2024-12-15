@@ -15,6 +15,7 @@ public class ClientGui extends JFrame implements MessageListener{
     private JPanel connectedUsersPanel, messagePanel;
     private MyStompClient myStompClient;
     private String username;
+    private JScrollPane messagePanelScrollPane;
 
     public ClientGui(String username) throws ExecutionException, InterruptedException {
         super("User: " + username);
@@ -70,8 +71,16 @@ public class ClientGui extends JFrame implements MessageListener{
         messagePanel = new JPanel();
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
         messagePanel.setBackground(Utility.TRANSPARENT_COLOR);
-        chartPanel.add(messagePanel, BorderLayout.CENTER);
 
+        messagePanelScrollPane = new JScrollPane(messagePanel);
+        messagePanelScrollPane.setBackground(Utility.TRANSPARENT_COLOR);
+        messagePanelScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        messagePanelScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        messagePanelScrollPane.getViewport().addChangeListener(e -> {
+            revalidate();
+            repaint();
+        });
+        chartPanel.add(messagePanelScrollPane, BorderLayout.CENTER);
 
         JPanel inputPanel = new JPanel();
         inputPanel.setBorder(Utility.addPadding(10,10,10,10));
