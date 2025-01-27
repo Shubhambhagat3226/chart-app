@@ -28,7 +28,7 @@ This is a simple real-time chat application built using Spring Boot and WebSocke
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/Shubhambhagat3226/chart-app
+    git clone https://github.com/Shubhambhagat3226/chart-app.git
     cd your-repo
     ```
 
